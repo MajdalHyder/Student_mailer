@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau{% endblock %}
+
+{% block body %}
+    <nav class="p-3 px-5 d-flex navbar navbar-light bg-dark">
+        <a class="btn btn-outline-success ml-auto" href="{{ path('main') }}" type="button">Acceuil</a>
+    </nav>
+    <div class="form-group p-4 mx-auto mt-4" style="width: 40%;">
+        {{ form_start(nouveauEtudiantform,{'action':path('cree'), 'method':"POST"} ,{'attr': {'class': 'form-control form-control-md mb-2'}})}}
+        {{ form_row(nouveauEtudiantform.nom, {'attr': {'class': 'custom-select form-control form-control-md mb-2' }}) }}
+        {{ form_row(nouveauEtudiantform.prenom, {'attr': {'class': 'custom-select form-control form-control-md mb-2' }}) }}
+        {{ form_row(nouveauEtudiantform.mail, {'attr': {'class': 'form-control form-control-md mb-2'}}) }}
+        {{ form_row(nouveauEtudiantform.convention, {'attr': {'class': 'form-control form-control-md mb-3'}}) }}
+        {{ form_row(nouveauEtudiantform.nbHeur, {'attr': {'class': 'custom-select form-control form-control-md mb-3' }}) }}
+        {{ form_row(nouveauEtudiantform.save, {'attr': { 'class' : 'btn btn-dark d-flex float-right'}}) }}
+        {{ form_end(nouveauEtudiantform) }}
+    </div>
+
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Attestation{% endblock %}
+
+{% block body %}
+    <nav class="p-3 px-5 d-flex navbar navbar-light bg-dark">
+            <a class="btn btn-outline-success ml-auto" href="{{ path('nouveauEntree') }}" type="button">Ajouter</a>
+    </nav>
+
+    <div class="form-group p-4 mx-auto mt-4" style="width: 50%;">
+    {{ form_start(form, {'attr': {'class': 'form-control form-control-md mb-2','action':path('main'), 'method':"POST"}})}}
+    {{ form_row(form.Etudiant, {'attr': {'class': 'custom-select form-control form-control-md mb-2','onchange': 'getConvention(event)' }}) }}
+    {{ form_row(form.Convention, {'attr': {'class': 'form-control form-control-md mb-2'}}) }}
+    {{ form_row(form.Attestation, {'attr': {'class': 'form-control form-control-lg mb-3 p-3', 'rows':'10'}}) }}
+    {{ form_row(form.save, {'attr': { 'class' : 'btn btn-dark d-flex float-right'}}) }}
+    {{ form_end(form) }}
+    </div>
+
+    <script>
+        function getConvention(event) {
+            var selectElement = event.target;
+            var value = selectElement.value;
+            url = '/'+value;
+            const xhttp = new XMLHttpRequest();
+            xhttp.onload = function() {
+                document.getElementById("attestaion_Convention").placeholder = JSON.parse(this.response)["nom"];
+                document.getElementById("attestaion_Attestation").innerHTML = "Bonjour " + JSON.parse(this.response)["nom_etu"] +
+                " " + JSON.parse(this.response)["prenom_etu"] + ",\n\n" +
+                "Vous avez suivi " + JSON.parse(this.response)["nbHeur"] + " heures de formation chez FormationPlus.\n" +
+                "Pouvez-vous nous retourner ce mail avec la pièce jointe signée.\n\nCordialement,\n\nFormationPlus";
+            }
+            xhttp.open("GET", url);
+            xhttp.send();
+        }
+    </script>
+{% endblock %}
