@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Convention;
 use App\Entity\Etudiant;
+use App\Entity\Attestation;
 use App\Form\AttestaionType;
 use App\Form\NouveauType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,6 +15,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class DefaultController extends AbstractController
 {
     /**
+     * //Le home route
+     *
      * @Route("/", name="main")
      * @param Request $request
      * @return Response
@@ -24,14 +27,19 @@ class DefaultController extends AbstractController
         $attestationForm->handleRequest($request);
 
         if ($attestationForm->isSubmitted() && $attestationForm->isValid()) {
+            $contenuAttestation = $request->request->get('attestaion');
+            $idEtudiant = $contenuAttestation["Etudiant"];
+            $textAttestation = $contenuAttestation["Attestation"];
+            $em = $this->getDoctrine()->getManager();
+            $etudiant = $em->getRepository(Etudiant::class)->find($idEtudiant);
+            $conventionEtudiant = $etudiant->getConvention();
 
-            //$etudiant = $attestationForm;
-           /* $em = $this->getDoctrine()->getManager();
-            $em->persist();
+            $attestation = new Attestation();
+            $attestation->setEtudiant($etudiant);
+            $attestation->setConvention($conventionEtudiant);
+            $attestation->setMessage($textAttestation);
+            $em->persist($attestation);
             $em->flush();
-            $user =$this->getUser();*/
-            //dd($etudiant);
-
         }
 
         return $this->render('default/index.html.twig', [
